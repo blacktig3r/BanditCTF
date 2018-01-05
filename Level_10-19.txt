@@ -1,0 +1,156 @@
+*********************************************
+Bandit Level 10 → Level 11
+==============================================
+Level Goal
+
+The password for the next level is stored in the file data.txt, which contains base64 encoded data
+Commands you may need to solve this level
+
+grep, sort, uniq, strings, base64, tr, tar, gzip, bzip2, xxd
+Helpful Reading Material
+
+    Base64 on Wikipedia
+
+Sol:
+
+root@BLACKTIG3R-PC:~# ssh bandit10@bandit.labs.overthewire.org -p 2220  
+This is a OverTheWire game server. More information on http://www.overthewire.org/wargames
+bandit10@bandit.labs.overthewire.org's password: 
+bandit10@bandit:~$ ls
+data.txt
+bandit10@bandit:~$ cat data.txt 
+VGhlIHBhc3N3b3JkIGlzIElGdWt3S0dzRlc4TU9xM0lSRnFyeEUxaHhUTkViVVBSCg==
+bandit10@bandit:~$ 
+
+Now password is in base64,After decryption >
+
+The password is IFukwKGsFW8MOq3IRFqrxE1hxTNEbUPR
+***********************************************************
+Bandit Level 11 → Level 12
+==========================================================
+Level Goal
+
+The password for the next level is stored in the file data.txt, where all lowercase (a-z) and uppercase (A-Z) letters have been rotated by 13 positions
+Commands you may need to solve this level
+
+grep, sort, uniq, strings, base64, tr, tar, gzip, bzip2, xxd
+Helpful Reading Material
+
+    Rot13 on Wikipedia
+ Sol:
+
+ 
+root@BLACKTIG3R-PC:~# ssh bandit10@bandit.labs.overthewire.org -p 2220  
+This is a OverTheWire game server. More information on http://www.overthewire.org/wargames
+bandit10@bandit.labs.overthewire.org's password: 
+ 
+ bandit11@bandit:~$ ls
+data.txt
+bandit11@bandit:~$ cat data.txt 
+Gur cnffjbeq vf 5Gr8L4qetPEsPk8htqjhRK8XSP6x2RHh
+bandit11@bandit:~$ 
+
+ Tool :http://www.rot13.com/
+>After converting using Rot13
+The password is 5Te8Y4drgCRfCx8ugdwuEX8KFC6k2EUu
+*********************************************************
+Bandit Level 12 → Level 13
+===
+Level Goal
+
+The password for the next level is stored in the file data.txt, which is a hexdump of a file that has been repeatedly compressed. For this level it may be useful to create a directory under /tmp in which you can work using mkdir. For example: mkdir /tmp/myname123. Then copy the datafile using cp, and rename it using mv (read the manpages!)
+Commands you may need to solve this level
+
+grep, sort, uniq, strings, base64, tr, tar, gzip, bzip2, xxd, mkdir, cp, mv
+Helpful Reading Material
+
+    Hex dump on Wikipedia
+
+Sol:
+As you can see, this level sucks. Luckily, once you get used to each command,it goes smoothly, if not quickly. 
+You want to start by moving the file to the /tmp/YourName directory so that you can work on it with write permissions.
+You must then use xxd to convert it out of a hex format and back into the compressed format. 
+From there you use the file command to determine what sort of file it is.
+In this case it is a gzip file, so we rename it to .gz then use the gzip command to uncompress it. 
+This process basically repeats for an absurd number of times using gzip, bzip2, and tar. 
+Eventually you will run the file command and it will tell you that you have an ASCII file
+
+
+
+root@BLACKTIG3R-PC:~# ssh bandit13@bandit.labs.overthewire.org -p 2220 
+This is a OverTheWire game server. More information on http://www.overthewire.org/wargames
+bandit13@bandit.labs.overthewire.org's password: 
+               
+[$]-> mkdir /tmp/yalpski
+[$]-> cp data.txt /tmp/yalpski/data.txt
+[$]-> cd /tmp/yalpski
+[$]-> xxd -r data.txt data.out
+[$]-> file data.out
+[$]-> mv data.out data.gz
+[$]-> gzip -d data.gz
+[$]-> file data
+[$]-> bzip2 -d data
+[$]-> file data.out
+[$]-> mv data.out data.gz
+[$]-> gzip -d data.gz
+[$]-> file data
+[$]-> tar -xf data
+[$]-> file data5.bin
+[$]-> tar -xf data5.bin
+[$]-> file data6.bin
+[$]-> bzip2 -d data6.bin
+[$]-> file data6.bin.out
+[$]-> tar -xf data6.bin.out
+[$]-> file data8.bin
+[$]-> mv data8.bin data8.gz
+[$]-> gzip -d data8.gz
+[$]-> cat data8
+
+The password for bandit13 is: 8ZjyCRiBWFYkneahHwxCv3wb2a1ORpYL
+*****************************************************************
+Bandit Level 13 → Level 14
+Level Goal
+
+The password for the next level is stored in /etc/bandit_pass/bandit14 and can only be read by user bandit14.
+For this level, you don’t get the next password, but you get a private SSH key that can be used to log into the next level. 
+Note: localhost is a hostname that refers to the machine you are working on
+Commands you may need to solve this level
+
+ssh, telnet, nc, openssl, s_client, nmap
+Helpful Reading Material
+
+    SSH/OpenSSH/Keys
+
+Sol:
+ssh bandit13@bandit.labs.overthewire.org -p 2220
+This is a OverTheWire game server. More information on http://www.overthewire.org/wargames
+bandit13@bandit.labs.overthewire.org's password: 
+
+bandit13@bandit:~$  ssh -i sshkey.private bandit14@localhost
+Could not create directory '/home/bandit13/.ssh'.
+The authenticity of host 'localhost (127.0.0.1)' can't be established.
+ECDSA key fingerprint is SHA256:98UL0ZWr85496EtCRkKlo20X3OPnyPSB5tB5RPbhczc.
+Are you sure you want to continue connecting (yes/no)? yes
+
+"sh -i sshkey.private bandit14@localhost" used because we have sshkey.private and also mentioned that localhost is a hostname.
+so we directly ssh into server without password.
+************************************************
+Bandit Level 14 → Level 15
+==============================================
+Level Goal
+
+The password for the next level can be retrieved by submitting the password of the current level to port 30000 on localhost.
+Commands you may need to solve this level
+
+ssh, telnet, nc, openssl, s_client, nmap
+Helpful Reading Material
+
+    How the Internet works in 5 minutes (YouTube) (Not completely accurate, but good enough for beginners)
+    IP Addresses
+    IP Address on Wikipedia
+    Localhost on Wikipedia
+    Ports
+    Port (computer networking) on Wikipedia
+
+
+
